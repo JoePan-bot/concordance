@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -1268,6 +1268,43 @@
       .top-actions .button { padding-inline: 9px; font-size: 11px; }
     }
 
+    :root[data-theme="dark"] {
+      color-scheme: dark;
+      --bg: #10161d;
+      --bg-raised: #18212b;
+      --panel: #18212b;
+      --panel-solid: #18212b;
+      --panel-soft: #202d39;
+      --line: #33424f;
+      --line-strong: #526576;
+      --text: #ecf2f6;
+      --muted: #a6b6c4;
+      --muted-strong: #c4d0da;
+      --mint: #319a72;
+      --mint-dark: #8be0bb;
+      --danger: #ff9eac;
+      --gold: #f8d477;
+    }
+    [data-theme="dark"] .topbar,
+    [data-theme="dark"] :is(.simple-overview, .stat-tile, .category-browser, .play-category-card, .hero-card, .panel, .hunt-card, .control, .word-chip, .manual-result, .page-head, .filter-bar, .category-card, .vocab-card, .archive-card, dialog, .toast, .draft-vocab-toggle, .category-word-row, .button.secondary) {
+      background: var(--panel-solid);
+    }
+    [data-theme="dark"] :is(.nav-tabs, .progress-summary, .category-play-control, .type-switch, .detector, .detector-head, .dialog-artifact, .manual-attach, .category-vocabulary-count, .vocab-card.missing) { background: var(--panel-soft); }
+    [data-theme="dark"] :is(.mini-progress, .play-category-card .mini-progress) { background: var(--line); }
+    [data-theme="dark"] :is(.nav-button:hover, .play-category-card:hover, .hunt-card:hover, .category-card:hover, .category-word-row:hover) { background: #293e3b; border-color: var(--mint); }
+    [data-theme="dark"] :is(.play-category-card.active, .draft-vocab-toggle.selected, .category-word-row.selected, .artifact-words .word-chip.clickable:hover, .admin-panel, .admin-move-tools) { background: #183e33; border-color: var(--mint); }
+    [data-theme="dark"] .draft-vocab-toggle.unselected { color: var(--muted); background: var(--panel-soft); }
+    [data-theme="dark"] :is(.draft-vocab-toggle.already-used, .category-word-row.has-find) { color: #b4d1ff; border-color: #5277a5; background: #203650; }
+    [data-theme="dark"] .draft-vocab-toggle.already-used.unselected { color: #a2b6d0; background: #253040; border-color: #526576; }
+    [data-theme="dark"] :is(.category-word-row.has-find .category-word-name, .category-word-row.has-find .category-word-status) { color: #b4d1ff; }
+    [data-theme="dark"] .vocab-card.missing .card-word { color: var(--muted-strong); }
+    [data-theme="dark"] .button.danger { background: #3c252d; border-color: #80505e; }
+    [data-theme="dark"] .button.primary:hover:not(:disabled) { background: #267a59; }
+    [data-theme="dark"] dialog::backdrop { background: rgba(0, 0, 0, 0.65); }
+    [data-theme="dark"] .toast { border-color: var(--line-strong); }
+    .top-actions { flex-wrap: wrap; }
+    .top-actions #themeToggle { width: auto; padding-inline: 12px; }
+
     @media (prefers-reduced-motion: reduce) {
       *, *::before, *::after { scroll-behavior: auto !important; animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; }
     }
@@ -1291,6 +1328,7 @@
       </nav>
 
       <div class="top-actions">
+        <button class="button secondary" id="themeToggle" type="button" aria-pressed="true" aria-label="Dark mode">Light mode</button>
         <button class="button ghost" id="adminModeButton" type="button" aria-pressed="false">Admin</button>
         <button class="button ghost" id="importButton" type="button">Import</button>
         <button class="button secondary" id="exportButton" type="button">Export</button>
@@ -7269,6 +7307,7 @@ Quantity, extent & comparison concepts:
         exportFindsTextButton: $("exportFindsTextButton"),
         importBlocksButton: $("importBlocksButton"),
         exportButton: $("exportButton"),
+        themeToggle: $("themeToggle"),
         importButton: $("importButton"),
         backupFileInput: $("backupFileInput"),
         blocksFileInput: $("blocksFileInput"),
@@ -7306,6 +7345,7 @@ Quantity, extent & comparison concepts:
         artifacts: [],
         selectedCategory: "all",
         hideUsedCategoryWords: false,
+        theme: "dark",
         customCategories: [],
         wordCategoryOverrides: {},
         draft: emptyDraft()
@@ -8865,7 +8905,19 @@ Quantity, extent & comparison concepts:
         if (!$("view-archive").hidden) renderArchive();
       }
 
+      function applyTheme() {
+        const dark = state.theme === "dark";
+        document.documentElement.dataset.theme = dark ? "dark" : "light";
+        els.themeToggle.setAttribute("aria-pressed", String(dark));
+        els.themeToggle.textContent = dark ? "Light mode" : "Dark mode";
+        els.themeToggle.title = dark ? "Switch to light mode" : "Switch to dark mode";
+      }
+
       function attachEvents() {
+        els.themeToggle.addEventListener("click", () => {
+          state.theme = state.theme === "dark" ? "light" : "dark";
+          applyTheme();
+        });
         els.navButtons.forEach((button) => button.addEventListener("click", () => {
           switchView(button.dataset.view);
           if (button.dataset.view === "collect") scrollToAddFind();
@@ -8961,6 +9013,7 @@ Quantity, extent & comparison concepts:
           return;
         }
         loadState();
+        applyTheme();
         applyCategoryConfiguration();
         populateCategorySelect();
         buildUsage();

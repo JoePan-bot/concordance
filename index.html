@@ -1292,10 +1292,13 @@
     [data-theme="dark"] :is(.nav-tabs, .progress-summary, .category-play-control, .type-switch, .detector, .detector-head, .dialog-artifact, .manual-attach, .category-vocabulary-count, .vocab-card.missing) { background: var(--panel-soft); }
     [data-theme="dark"] :is(.mini-progress, .play-category-card .mini-progress) { background: var(--line); }
     [data-theme="dark"] :is(.nav-button:hover, .play-category-card:hover, .hunt-card:hover, .category-card:hover, .category-word-row:hover) { background: #293e3b; border-color: var(--mint); }
-    [data-theme="dark"] :is(.play-category-card.active, .draft-vocab-toggle.selected, .category-word-row.selected, .artifact-words .word-chip.clickable:hover, .admin-panel, .admin-move-tools) { background: #183e33; border-color: var(--mint); }
+    [data-theme="dark"] :is(.play-category-card.active, .category-word-row.selected, .artifact-words .word-chip.clickable:hover, .admin-panel, .admin-move-tools) { background: #183e33; border-color: var(--mint); }
+    [data-theme="dark"] .draft-vocab-toggle.selected { color: #b9f5d8; background: #183e33; border-color: var(--mint); }
     [data-theme="dark"] .draft-vocab-toggle.unselected { color: var(--muted); background: var(--panel-soft); }
-    [data-theme="dark"] :is(.draft-vocab-toggle.already-used, .category-word-row.has-find) { color: #b4d1ff; border-color: #5277a5; background: #203650; }
-    [data-theme="dark"] .draft-vocab-toggle.already-used.unselected { color: #a2b6d0; background: #253040; border-color: #526576; }
+    [data-theme="dark"] .category-word-row.has-find { color: #b4d1ff; border-color: #5277a5; background: #203650; }
+    [data-theme="dark"] .draft-vocab-toggle.already-used { color: #e0ecff; border-color: #8ab8ff; background: #243f70; }
+    [data-theme="dark"] .draft-vocab-toggle.already-used.unselected { color: #c0d6f5; border-color: #6c91c5; background: #243650; }
+    [data-theme="dark"] .draft-vocab-toggle.already-used.current-category { box-shadow: inset 3px 0 0 #8ab8ff; }
     [data-theme="dark"] :is(.category-word-row.has-find .category-word-name, .category-word-row.has-find .category-word-status) { color: #b4d1ff; }
     [data-theme="dark"] .vocab-card.missing .card-word { color: var(--muted-strong); }
     [data-theme="dark"] .button.danger { background: #3c252d; border-color: #80505e; }
@@ -7888,7 +7891,7 @@ Quantity, extent & comparison concepts:
         button.title = item.category + " · Level " + item.level + (detected ? " · Found in draft" : " · Manually attached") + (alreadyUsed ? " · Already has a saved find" : "");
         button.appendChild(el("span", "draft-vocab-word", item.display));
         button.appendChild(el("span", "draft-vocab-meta", "L" + item.level + " · " + item.category));
-        button.appendChild(el("span", "draft-vocab-state", (selected ? "Included" : "Excluded") + (alreadyUsed ? " · Used" : "")));
+        button.appendChild(el("span", "draft-vocab-state", (selected ? "Included" : "Excluded") + (alreadyUsed ? " · Used" : " · Unused")));
         button.addEventListener("click", () => toggleDraftWordSelection(item.id));
         return button;
       }
